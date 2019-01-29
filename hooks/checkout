@@ -1,0 +1,30 @@
+#!/bin/bash -eu
+
+# Parse the buildkite repo to see if its a github SSH URL.
+#
+# If in ssh format we want the org/repo component
+# <user>@<hostname.tld>:<org>/<repo>(.git)
+#
+# to look up /github/<org>/<repo>/deploy-key in the SSM parameter store.
+
+# If this is an SSH github URL using the git user we can look up the deploy
+# key for the repo.
+if [[ "${BUILDKITE_REPO}" =~ ^git@github\.com ]]
+then
+	github_repo="$(echo "${BUILDKITE_REPO}" | cut -d: -f2 | cut -d. -f1)"
+	ssm_parameter_name="/github/${github_repo}/deploy-key"
+
+	echo >&2 "Fetching deploy key from AWS Systems Manager Parameter Store"
+	echo >&2 "> ${ssm_parameter_name}"
+
+	deploy_key="$(aws ssm get-parameter --name "${ssm_parameter_name}" --with-decryption --query Parameter.Value --output text)"
+	if [ -z "${deploy_key}" ]
+	then
+		echo >&2 "> couldn't fetch the repository deploy key from AWS Systems Manager Parameter Store"
+		exit 1
+	fi
+
+	ssh-agent <<<"${deploy_key}" bash -euxc "ssh-add -; buildkite-agent bootstrap --phases checkout --hooks-path=''"
+else
+	buildkite-agent bootstrap --phases checkout --hooks-path=''
+fi

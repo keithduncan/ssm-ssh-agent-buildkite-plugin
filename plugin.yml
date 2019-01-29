@@ -1,0 +1,7 @@
+name: SSM SSH Agent
+description: Fetch SSH private keys from AWS Systems Manager Parameter Store and load them into a one-shot SSH Agent.
+author: https://github.com/keithduncan
+requirements:
+  - aws
+configuration:
+  properties: {}
