@@ -16,7 +16,7 @@ SecureString named `/github/{organisation}/{repository}/deploy-key` with the key
 
 ```yml
 steps:
-  - command: script/cibuild
-    plugins:
-      - keithduncan/ssm-ssh-agent#v1.0
+- command: script/cibuild
+  plugins:
+  - "keithduncan/ssm-ssh-agent#v1.0"
 ```
