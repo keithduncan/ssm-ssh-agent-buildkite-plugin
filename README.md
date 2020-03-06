@@ -1,5 +1,9 @@
 # ssm-ssh-agent-buildkite-plugin
 
+Superseded by [iam-ssh-agent](https://github.com/keithduncan/iam-ssh-agent).
+
+---
+
 Wraps the built-in Buildkite checkout phase in a one-shot SSH Agent, populated
 with an SSH Private key fetched from the AWS Systems Manager Parameter Store.
 
