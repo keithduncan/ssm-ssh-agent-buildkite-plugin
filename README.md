@@ -1,7 +1,7 @@
 # ssm-ssh-agent-buildkite-plugin
 
 Superseded by [iam-ssh-agent](https://github.com/keithduncan/iam-ssh-agent) which
-improves security by removing the for direct access to private key material.
+improves security by removing the need for direct access to private key material.
 
 ---
 
